@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, Dataset
 class VideoDataset(Dataset):
 
     def __init__(self, directory, mode='train', clip_len=8, frame_sample_rate=1):
-        folder = Path(directory)/mode  # get the directory of the specified split
+        folder = Path(directory) #/mode  # get the directory of the specified split
         self.clip_len = clip_len
 
         self.short_side = [128, 160]
@@ -141,7 +141,7 @@ class VideoDataset(Dataset):
 
 if __name__ == '__main__':
 
-    datapath = '/disk/data/UCF-101'
+    datapath = '/data1/data/UCF101'
     train_dataloader = \
         DataLoader( VideoDataset(datapath, mode='train'), batch_size=10, shuffle=True, num_workers=0)
     for step, (buffer, label) in enumerate(train_dataloader):
