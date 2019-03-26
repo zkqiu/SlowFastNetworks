@@ -54,7 +54,7 @@ def train(model, train_dataloader, epoch, criterion, optimizer, writer):
     for step, (inputs, labels) in enumerate(train_dataloader):
         data_time.update(time.time() - end)
 
-        inputs = inputs.cuda()
+        inputs = inputs.cuda().float()
         labels = labels.cuda()
         outputs = model(inputs)
         loss = criterion(outputs, labels)
@@ -151,7 +151,7 @@ def main():
 
     val_dataloader = \
         DataLoader(
-            VideoDataset(params['dataset'], mode='validation', clip_len=params['clip_len'], frame_sample_rate=params['frame_sample_rate']),
+            VideoDataset(params['dataset'], mode='train', clip_len=params['clip_len'], frame_sample_rate=params['frame_sample_rate']),
             batch_size=params['batch_size'], shuffle=False, num_workers=params['num_workers'])
 
     print("load model")
@@ -180,7 +180,7 @@ def main():
         os.makedirs(model_save_dir)
     for epoch in range(params['epoch_num']):
         train(model, train_dataloader, epoch, criterion, optimizer, writer)
-        if epoch % 2== 0:
+        if (epoch+1) % 5== 0:
             validation(model, val_dataloader, epoch, criterion, optimizer, writer)
         scheduler.step()
         if epoch % 1 == 0:
@@ -188,7 +188,7 @@ def main():
                                       "clip_len_" + str(params['clip_len']) + "frame_sample_rate_" +str(params['frame_sample_rate'])+ "_checkpoint_" + str(epoch) + ".pth.tar")
             torch.save(model.module.state_dict(), checkpoint)
 
-    writer.close
+    writer.close()
 
 if __name__ == '__main__':
     main()

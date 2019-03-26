@@ -93,6 +93,7 @@ class SlowFast(nn.Module):
         x = torch.cat([slow, fast], dim=1)
         x = self.dp(x)
         x = self.fc(x)
+        #print (x.size)
         return x
 
 
@@ -210,7 +211,7 @@ def resnet200(**kwargs):
     return model
 
 if __name__ == "__main__":
-    num_classes = 101
+    num_classes = 600
     input_tensor = torch.autograd.Variable(torch.rand(1, 3, 64, 224, 224))
     model = resnet50(class_num=num_classes)
     output = model(input_tensor)
